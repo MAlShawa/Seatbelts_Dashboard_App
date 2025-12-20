@@ -1,0 +1,114 @@
+---
+title: "Seatbelts_Dashboard"
+subtitle: <br>"A Multivariate Approach to the UK Road Safety<br>Seatbelts Dataset Analysis"
+author: "M.S."
+date: "2025-12-20"
+output: 
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(ggplot2)
+library(datasets)
+
+# Prep data for the slide plot
+sb_data <- as.data.frame(Seatbelts)
+sb_data$Date <- seq(as.Date("1969-01-01"), by = "month", length.out = nrow(sb_data))
+law_start_date <- sb_data$Date[170]
+```
+
+## Complexity of Road Safety Modeling {.columns-2}
+
+Evaluating the 1983 UK Seatbelt Law isn't simple. 
+Raw data is often clouded by:
+
+- **Economic Shifts:** Changes in petrol prices  influence how much people drive.
+- **Policy Impact and Shortcomings:** Law had an impact on front-seat safety, but might have led to different behaviors that affected rear-seat  passengers differently.
+- **Seasonality:** Winter vs. Summer driving patterns.
+- **Exposure:** Total distance driven (kms).
+- **The Paradox:** How to separate long-term safety improvements from the actual impact of the law, or economic factors.
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```{r plot, fig.width=5}
+ggplot(sb_data, aes(x = Date, y = DriversKilled)) +
+            geom_line(aes(color = factor(law))) +
+            geom_point(aes(color = factor(law)), alpha = 0.6) +
+            geom_vline(xintercept = as.numeric(law_start_date), 
+                       linetype = "dashed", color = "red", size = 1.2) +
+            annotate("text", x = law_start_date + 95, y = 180, 
+                     label = "1983 Seatbelts\n    Law Starts", color = "red", fontface = "bold", hjust = 0) +
+            theme_minimal() +
+            labs(title = "Monthly Driver Fatalities (1969 - 1984)",
+                 subtitle = "An R-code ggplot rendering of the Seatbelts Data",
+                 x = "Year", y = "Drivers Killed",
+                 color = "Drivers Killed\n(Before/After\nSeatbelts Law)" ) +
+            #theme(legend.position = "bottom") 
+            theme(
+                legend.position = "bottom",
+                legend.text = element_text(size = 10),
+                legend.title = element_text(face = "bold")) +
+            scale_color_discrete(labels = c("Before the Law", "After the Law"))
+```
+
+
+## Strategic Design: The Dashboard Solution
+
+**Our Seatbelts_Dashboard App provides a modular analytical pipeline to address specific challenges in road safety modeling:**
+
+<br>
+
+| Tab Name | Analytical Problem | Solution Provided |
+|:--|:---|:---------|
+| **Exploratory** | Unclear Correlations | Real-time univariate regression mapping. |
+| **Front vs Rear** | Attribution Bias | Comparison of legislated vs. non-legislated groups. |
+| **Seasonality** | Environmental Noise | Monthly factor controls and Interaction Toggles. |
+| **Prediction** | Static Reporting | Live "What-If" simulator with multivariant model and Time-Trend correction. |
+
+<br>
+<br>
+
+App : <https://rpubs.com/MAlShawa/1382929>.
+
+Presentation and App Code: <https://github.com/MAlShawa/Seatbelts_Dashboard_App>.
+
+## Usability & Statistical Integrity
+
+The Seatbelts_Dashboard App is built for both **stakeholders** and **statisticians**, balancing ease of use with deep mathematical rigor.
+
+- **Analytical Accuracy:** Provides model details, and resolves the "Distance Paradox" by accounting for long-term safety trends via a Time-Trend variable.
+- **Statistical Safeguards:** Built-in *Durbin-Watson tests* to check for autocorrelation, while *Residual Plots* validate model assumptions.
+- **Strategic Value:** Empowers users to predict fatalities by manipulating petrol prices, distance, and law status.
+- **Modern UI Design:** Utilizing the *lumen* professional theme, high-contrast *bold* labels, and interactive UI elements such as sliders and checkboxes.
+- **Clarity:** Uses numbered seasonal legends to bridge the gap between complex plots and the prediction simulator.
+- **Data Explained:** Features a live "About Data" section with full variable description.
+- **Ease of Use:** Features a live "About App" section with a Navigation Guide and description of the UI Components.
+
+
+
+## Conclusion: Data-Driven Decisions
+
+**This dashboard transforms the historical Seatbelts dataset into a dynamic  modern decision-support tool for policy evaluation.**
+
+1. **Exploratory**: Visualizing raw trends, the affect of seasonality, and the effect of policy on legislated vs. non-legislated groups.
+2. **Validating**: Using Durbin-Watson tests for autocorrelation, and Residual Plots to validate model assumptions.
+3. **Predictive**: Simulating the future of road safety by allowing the decision maker to interact with the model and see the effect of changing its predictors' values.
+
+**The application provides:**
+
+1. **User-Centric UI**: Easy to use controls, such as bold toggles for the Law, sliders for Seasonality, and precise Kilometer inputs. 
+2. **Statistical Honesty**: The App doesn't just provide a number; it provides the *Mean Absolute Error (MAE)* and *Adjusted R²*. 
+3. **Visual Feedback**: The interface uses a clean, professional theme to make complex econometrics accessible to stakeholders. 
+
+<center><font size="+2">**Drive safer policy through interactive econometrics.**</font></center>
+
+
+
